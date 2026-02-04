@@ -1,0 +1,250 @@
+---
+title: "M01-2-Introduction to Literate Programming-Application Assignment"
+author: "Kelly Liang"
+date: '`r format(Sys.time())`'
+format: 
+  html: 
+    toc: true
+    toc-depth: 4
+    number-sections: true
+    code-line-numbers: true
+    code-fold: false
+    code-link: true
+    embed-resources: true
+editor: visual
+execute: 
+  freeze: auto
+  warning: false
+---
+
+# Exercise 1: Create a variable 
+
+> **Task:** Create a variable called X and assign the text "This is my first assignment" to it.
+
+```{r}
+# Create variable X with the specified text
+X <- "This is my first assignment"
+
+#Print the variable to confirm assignment
+X
+# Use Ctrl + Alt + I to create new chunk
+```
+
+::: callout-tip
+## Hint
+
+Use `<-` to assign a variable to the text.
+:::
+
+# Exercise 2: Adding texts in Base R.
+
+> **Task:** Learn about the `paste()` function and use it to add text to variable X.
+
+::: callout-tip
+## Hint
+
+This exercise illustrates how you can learn by using sample codes available from help documents for any functions in R. Execute each line to see how `paste()` and `paste0()` work differently.
+:::
+
+```{r}
+# Examples from the help documentation for paste()
+# paste() separates arguments with a space by default
+paste("Hello", "World")
+
+# paste0() concatenates without any separator
+paste0("Hello", "World")
+
+# Using the sep argument to specify a custom separator
+paste("A", "B", "C", sep = "-")
+
+# Using the collapse argument to combine vector elements
+paste(c("X", "Y", "Z"), collapse = ", ")
+
+# Combining multiple arguments
+paste("Month", 1:12, sep = " ")
+```
+
+```{r}
+# Add the new text to variable X using paste()
+X <- paste(X, "and I'm loving it!")
+
+#print the updated variable
+X
+```
+
+::: callout-note
+The key difference between `paste()` and `paste0()` is that `paste()` uses a space as the default separator, while `paste0()` has no separator.
+:::
+
+# Exercise 3: Creating and Manipulating a Vector
+
+> **Task:** Create a vector called Y with the numbers 2, 3, 4, and 5. Next, multiply the vector by 2 and save it as Y again.
+
+::: callout-tip
+## Hint
+
+Use the `c()` function to combine numbers into a vector, and use the `*` operator for multiplication.
+:::
+
+```{r}
+# Create vector Y with specified numbers
+Y <- c(2,3,4,5)
+
+# Multiply the vector by 2 and reassign to Y 
+Y <- Y *2
+
+# Print the updated vector to confirm
+Y
+```
+
+# Exercise 4: Printing Variables
+
+> **Task:** Print both the variable (X) and the vector (Y).
+
+```{r}
+# Print variable X
+print(X)
+
+#Print vector Y
+print(Y)
+```
+
+# Exercise 5: Finding Maximum and Minimum Values
+
+> **Task:** Show the maximum and the minimum value of the vector Y.
+
+```{r}
+# Find and display maximum value of Y
+max_value <- max(Y)
+print(paste("Maximum value of Y:", max_value))
+
+# Find and display the minimum value of Y
+min_value <- min(Y)
+print(paste("Minimum value of Y:", min_value))
+```
+
+# Exercise 6: Loading Packages and Exploring Data
+
+> **Task:** Load up the ggplot2 package and look at the first six rows of the data called "economics."
+
+::: callout-tip
+## Hint
+
+If you have already installed the package before, you don't need to run the `install.packages()` code again.
+:::
+
+```{r}
+#| eval: false 
+# Install ggplot2 package (only run if not already installed)
+#install.packages("ggplot2")
+```
+
+```{r}
+# Load ggplot 2 package
+library(ggplot2)
+
+# View the first 6 rows of economics dataset
+head(economics)
+```
+
+# Exercise 7: Creating a Visualization with ggplot2 
+
+> **Task:** Use the "economics" dataset from ggplot2 package. Understand the data, provide variable definitions, pick two related variables, and create a chart.
+
+### Variable Definitions: 
+
+-   **date:** Month of data collection
+
+-   **pce**: Personal consumption expenditures, in billions of dollars
+
+-   **pop**: Total population, in thousands
+
+-   **psavert**: Personal savings rate
+
+-   **uempmed**: Median duration of unemployment, in weeks
+
+-   **unemploy**: Number of unemployed, in thousands\
+
+::: callout-tip
+## Hint
+
+All variables are continuous, so a scatter plot (`geom_point`) is appropriate for visualizing the relationship between two variables.
+:::
+
+```{r}
+# Create the basic plot layers
+plot <- ggplot(data = economics, aes(x = unemploy, y = uempmed)) + geom_point()
+
+#Add labels the title
+plot + 
+  labs(title = "Relationship Between Number of Unemployed and Median Duration of Unemployment",
+       x = "Number of Unemployed (in thousands)",
+       y = "Median Duration of Unemployment (in weeks)")
+```
+
+# Exercise 8: Using Pipe Operator and Figure Options
+
+> **Task:** Replicate the chart using a pipe operator without saving the plot object. Add a label, caption, and control figure dimensions.
+
+::: callout-tip
+## Hint
+
+Use `#|` inside the code chunk to control the label, caption, and size of the figure. The pipe operator in ggplot2 is `+`.
+:::
+
+```{r}
+#| label: fig-unemployment
+#| fig-cap: "Scatter plot showing the relationship between the number of unemployed individuals and the median duration of unemployment in the US from 1967 to 2015"
+#| fig-width: 5
+#| fig-asp: 0.6
+
+# Create the complete plot using one continous chain
+economics |>
+  ggplot(aes(x = unemploy, y = uempmed)) +
+  geom_point(alpha = 0.6, color = "steelblue") + 
+  labs(title = "Relationship Between Number of Unemployed and Median Duration of Unemployment", 
+       x = "Number of Unemployed (in thousands)", 
+       y = "Median Duration of Unemployment (in weeks)") + 
+  theme_minimal()
+```
+
+# Exercise 9: Describing Findings
+
+> **Task:** Using a callout block, describe your findings and use cross-referencing to refer to the figure created earlier.
+
+::: callout-important
+## Key Findings
+
+As shown in @fig-unemployment, there appears to be a **positive relationship** between the number of unemployed individuals and the median duration of unemployment. This suggests that during periods of higher unemployment, those who are unemployed tend to remain jobless for longer periods.
+
+Observations from the visualization:
+
+-   The data points show considerable *variation* in unemployment duration across different levels of total unemployment
+-   There appears to be a clustering of points in the lower-left portion of the graph, indicating that for much of the time period, both unemployment numbers and duration were relatively moderate
+-   Some outliers exist in the upper-right region, likely representing economic recessions where both metrics were elevated
+-   The relationship is not perfectly linear, suggesting other economic factors may influence unemployment duration beyond just the total number of unemployed
+:::
+
+# Exercise 10: Summary of Formatting Tools Used
+
+> **Task:** Implement at least 10 different Quarto tools throughout the report and summarize them.
+
+::: callout-note
+## Formatting Tools Implementation Summary
+
+Below is a list of Quarto Markdown tools I implemented throughout this document to make it organized and easy to navigate.
+:::
+
+**Tools Implemented in This Document:**
+
+1.  **Section numbering** using `#`, `##`, and `###` for hierarchical organization of content
+2.  **Bold font** to emphasize important terms and concepts (e.g., **pop**, **unemply**)
+3.  **Italicized font** for emphasis and technical terms (e.g., *Quarto* *Markdown*, *variation*)
+4.  **`callout-tip`** blocks for all hints throughout the exercises
+5.  **`callout-note`** blocks to provide additional information and explanations
+6.  **`callout-important`** blocks for critical information and key findings
+7.  **Blockquote** (using `>`) for every task description consistently
+8.  **Tick marks** (`` ` ``) before and after function names to distinguish them from regular text (e.g., `paste()`, `ggplot()`, `head()`)
+9.  **Cross-reference** to the figure using `@fig-unemployment` in Exercise 9
+10. **Optional arguments** using `#|` inside code chunks to control figure labels, captions, width, and aspect ratio
+11. **Bulleted lists** using `-` for variable definitions and key observations
